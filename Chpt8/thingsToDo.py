@@ -41,3 +41,63 @@ Small Gods,Terry Pratchett,1992'''
 test5Out = open('books2.csv', 'wt')
 test5Out.write(books2CSVOut)
 test5Out.close()
+
+#Thing 6
+print("---Thing 6---")
+import sqlite3
+conn = sqlite3.connect(':memory:')
+curs = conn.cursor()
+curs.execute('''CREATE TABLE books
+(title TEXT primary key,
+author TEXT,
+year INT)''')
+
+#Thing 7
+print('---Thing 7---')
+with open('books2.csv', 'rt') as fin:
+    cin = csv.DictReader(fin)
+    books2 = [row for row in cin]
+print(books2)
+ins = 'INSERT INTO books (title, author, year) VALUES(?, ?, ?)'
+for key in books2:
+    curs.execute(ins, (key['title'], key['author'], key['year']))
+    
+#Thing 8
+print('---Thing 8---')
+curs.execute('SELECT title FROM books ORDER BY title')
+thing8Result = curs.fetchall()
+for title in thing8Result:
+    print(title[0])
+
+#Thing 9
+print('---Thing 9---')
+curs.execute('SELECT * FROM books ORDER BY year')
+thing9Result = curs.fetchall()
+for row in thing9Result:
+    print("{} {} {}".format(row[0], row[1], row[2]))
+
+curs.close()
+
+#Thing 10
+print('---Thing 10---')
+import sqlalchemy as sa
+saConn = sa.create_engine('sqlite://')
+thing10Rows = conn.execute('SELECT title FROM books ORDER BY title')
+for thing10Row in thing10Rows:
+    print(thing10Row[0])
+
+conn.close()
+
+#Thing 11
+print('---Thing 11---')
+import redis
+thing11Conn = redis.Redis()
+thing11Conn.set("count", 1)
+thing11Conn.set('name', 'Fester Bestertester')
+print(thing11Conn.keys('*'))
+print(thing11Conn.mget(['count', 'name']))
+
+#Thing 12
+print('---Thing 12---')
+thing11Conn.incr('count')
+print(thing11Conn.get('count'))
