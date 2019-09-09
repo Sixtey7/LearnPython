@@ -13,6 +13,12 @@ def healthz():
 def getAll():
     return jsonify(todos), 200
 
+@app.route('/todos/<string:todo_id>', methods=['GET'])
+def getRoute(todo_id):
+    print('Got the id %s' % todo_id)
+
+    return jsonify(todos[todo_id])
+
 @app.route('/todos', methods=['POST'])
 def createObj():
     if not request.json:
