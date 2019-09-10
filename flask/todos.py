@@ -39,4 +39,31 @@ def createObj():
 
     return jsonify({'todo': todo}), 201
 
+@app.route('/todos/<string:todo_id>', methods=['PUT'])
+def updateObj(todo_id):
+    if not request.json:
+        abort(400, 'No request body provided!')
+    
+    if not todos[todo_id]:
+        abort(400, 'Id does not exist, use POST to create new todo')
+    
+    todo = {
+        'id': todo_id,
+        'title': request.json['title'],
+        'complete': bool(request.json['complete'])
+    }
+
+    todos[todo_id] = todo
+
+    return jsonify({'todo': todo}), 201
+
+@app.route('/todos/<string:todo_id>/<string:complete>', methods=['PUT'])
+def toggleComplete(todo_id, complete):
+    if not todos[todo_id]:
+        abort(400, 'Id does not exist, use POST to create new todo')
+
+    todos[todo_id]['complete'] = bool(complete)
+
+    return jsonify({'todo': todos[todo_id]}), 201
+
 app.run(port=5000, debug=True)
