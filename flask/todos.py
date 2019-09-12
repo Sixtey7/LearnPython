@@ -66,4 +66,13 @@ def toggleComplete(todo_id, complete):
 
     return jsonify({'todo': todos[todo_id]}), 201
 
+@app.route('/todos/<string:todo_id>', methods=['DELETE'])
+def deleteTodo(todo_id):
+    if not todos[todo_id]:
+        abort(400, 'Cannot delete an id that doesn\'t exist')
+    
+    del todos[todo_id]
+
+    return '', 200
+
 app.run(port=5000, debug=True)
