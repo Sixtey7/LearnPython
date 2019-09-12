@@ -1,5 +1,6 @@
 from flask import Flask, request, abort, jsonify
 from uuid import uuid4
+from todo import Todo
 
 todos = {}
 
@@ -11,13 +12,14 @@ def healthz():
 
 @app.route('/todos', methods=['GET'])
 def getAll():
-    return jsonify(todos), 200
+    #TODO: This is gnarly, I need to look into a better way to do this
+    return jsonify([todos[todoId].toObj() for todoId in todos]), 200
 
 @app.route('/todos/<string:todo_id>', methods=['GET'])
 def getRoute(todo_id):
     print('Got the id %s' % todo_id)
 
-    return jsonify(todos[todo_id])
+    return jsonify(todos[todo_id].toObj())
 
 @app.route('/todos', methods=['POST'])
 def createObj():
@@ -29,15 +31,11 @@ def createObj():
     else:
         todoId = str(uuid4())
 
-    todo = {
-        'id': todoId,
-        'title': request.json['title'],
-        'complete': False
-    }
+    todo = Todo(todoId, request.json['title'])
 
     todos[todoId] = todo
 
-    return jsonify({'todo': todo}), 201
+    return jsonify({'todo': todo.toObj()}), 201
 
 @app.route('/todos/<string:todo_id>', methods=['PUT'])
 def updateObj(todo_id):
@@ -46,13 +44,8 @@ def updateObj(todo_id):
     
     if not todos[todo_id]:
         abort(400, 'Id does not exist, use POST to create new todo')
-    
-    todo = {
-        'id': todo_id,
-        'title': request.json['title'],
-        'complete': bool(request.json['complete'])
-    }
 
+    todo = Todo(todo_id, request.json['title'])
     todos[todo_id] = todo
 
     return jsonify({'todo': todo}), 201
@@ -64,7 +57,7 @@ def toggleComplete(todo_id, complete):
 
     todos[todo_id]['complete'] = bool(complete)
 
-    return jsonify({'todo': todos[todo_id]}), 201
+    return jsonify({'todo': todos[todo_id].toObj()}), 201
 
 @app.route('/todos/<string:todo_id>', methods=['DELETE'])
 def deleteTodo(todo_id):
