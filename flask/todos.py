@@ -1,6 +1,7 @@
 from flask import Flask, request, abort, jsonify
 from uuid import uuid4
 from todo import Todo
+from todoDB import TodoDB
 
 todos = {}
 
@@ -73,6 +74,11 @@ def delete_todo(todo_id):
 
     del todos[todo_id]
 
+    return '', 200
+
+@app.route('/todos/playWithDb', methods=['GET'])
+def play_with_database():
+    hello = TodoDB()
     return '', 200
 
 

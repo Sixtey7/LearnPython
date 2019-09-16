@@ -16,3 +16,8 @@ class TodoDB:
             id = Column(Integer, primary_key=True)
             title = Column(String)
             completed = Column(String)
+
+            def __repr__(self):
+                return "<Todo(name='%s', title='%s', completed='%s')>" % (self.id, self.title, self.completed)
+
+        Base.metadata.create_all(self.engine)
