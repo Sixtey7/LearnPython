@@ -76,6 +76,7 @@ def delete_todo(todo_id):
 
     return '', 200
 
+
 @app.route('/todos/playWithDb', methods=['GET'])
 def play_with_database():
     hello = TodoDB()
