@@ -22,6 +22,11 @@ class TodoDB:
 
         Base.metadata.create_all(self.engine)
 
-        # new_todo = Todo(id=1, title="Hello World", completed = "false")
+        Session = sessionmaker(bind=self.engine)
 
-        self.session = sessionmaker(bind=self.engine)
+        self.session = Session()
+        
+        new_todo = Todo(id=1, title="Hello World", completed = "false")
+
+        self.session.add(new_todo)
+
