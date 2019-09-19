@@ -1,7 +1,7 @@
 # import sqlite3
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
-
+from sqlalchemy.orm import sessionmaker
 
 class TodoDB:
     def __init__(self):
@@ -21,3 +21,7 @@ class TodoDB:
                 return "<Todo(name='%s', title='%s', completed='%s')>" % (self.id, self.title, self.completed)
 
         Base.metadata.create_all(self.engine)
+
+        # new_todo = Todo(id=1, title="Hello World", completed = "false")
+
+        self.session = sessionmaker(bind=self.engine)
