@@ -25,8 +25,17 @@ class TodoDB:
         Session = sessionmaker(bind=self.engine)
 
         self.session = Session()
-        
-        new_todo = Todo(id=1, title="Hello World", completed = "false")
+
+        # figure out the max id
+        max_id = self.session.query(func.max(Todo.id)).scalar()
+        print("Max id was: %s" % max_id)
+        new_todo = Todo(id=(max_id + 1), title="Hello World", completed = "false")
 
         self.session.add(new_todo)
 
+        self.session.commit()
+
+        # get the todo back out
+        got_todo = self.session.query(Todo).filter_by(id=1).first()
+
+        print(got_todo)
