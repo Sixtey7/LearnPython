@@ -3,7 +3,9 @@ from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+
 class TodoDB:
+
     def __init__(self):
         print('Creating the database!')
 
@@ -29,7 +31,7 @@ class TodoDB:
         # figure out the max id
         max_id = self.session.query(func.max(Todo.id)).scalar()
         print("Max id was: %s" % max_id)
-        new_todo = Todo(id=(max_id + 1), title="Hello World", completed = "false")
+        new_todo = Todo(id=(max_id + 1), title="Hello World", completed="false")
 
         self.session.add(new_todo)
 
