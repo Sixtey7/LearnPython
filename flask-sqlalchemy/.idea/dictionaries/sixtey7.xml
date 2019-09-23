@@ -2,6 +2,7 @@
   <dictionary name="sixtey7">
     <words>
       <w>sqlalchemy</w>
+      <w>tablename</w>
       <w>todos</w>
     </words>
   </dictionary>

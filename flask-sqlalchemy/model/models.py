@@ -1,10 +1,10 @@
-from database import db
+from model.database import db
 from sqlalchemy import *
 
 
 class Todo(db.Model):
     __tablename__ = 'todo'
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     title = Column(String)
     completed = Column(String)
 
