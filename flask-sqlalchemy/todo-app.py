@@ -1,6 +1,5 @@
 from flask import Flask, abort, jsonify, request
 from model.database import db
-from model.models import Todo
 import model.TodoDB as TodoDB
 
 # Create the flask app
@@ -14,6 +13,9 @@ db.init_app(app)
 db.app = app
 
 # Create all of the tables
+# Note: The below line comes back as not used, but I believe I need to import it to make sure the
+# table gets created
+from model.models import Todo
 db.create_all()
 
 
@@ -60,6 +62,18 @@ def set_completed(todo_id, completed):
         todo = TodoDB.update_todo(todo_id=todo_id, completed=completed)
 
         return jsonify(todo.to_obj()),200
+    except ValueError:
+        abort(404, "Could not find todo with the provided id")
+
+
+@app.route('/todos/<string:todo_id>', methods=['DELETE'])
+def delete_todo(todo_id):
+    try :
+        status = TodoDB.delete_todo(todo_id)
+        if status:
+            return '', 200
+        else:
+            return '', 500
     except ValueError:
         abort(404, "Could not find todo with the provided id")
 

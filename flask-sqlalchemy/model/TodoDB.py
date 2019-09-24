@@ -39,3 +39,15 @@ def update_todo(todo_id, title=None, completed=None):
     db.session.commit()
 
     return todo_to_update
+
+
+def delete_todo(todo_id):
+    todo_to_delete = Todo.query.filter_by(id=todo_id).first()
+
+    if todo_to_delete is None:
+        raise ValueError("Could not find Todo with id")
+
+    db.session.delete(todo_to_delete)
+    db.session.commit
+
+    return True
