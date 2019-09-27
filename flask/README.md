@@ -5,4 +5,3 @@ Playing around with a little simple series of RESTful services using Flask and s
 Installed the following through pip3
 * flask
 * sqlalchemy
-* flask-sqlalchemy
