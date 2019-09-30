@@ -78,7 +78,7 @@ def update_obj(todo_id):
         abort(404, "Could not find todo with the provided id")
 
 
-@app.route('/todos/<string:todo_id>/<string: completed>', methods=['PUT'])
+@app.route('/todos/<string:todo_id>/<string:completed>', methods=['PUT'])
 def set_completed(todo_id, completed):
     """Sets the completed state of the specified Todo to the specified completed value
 
