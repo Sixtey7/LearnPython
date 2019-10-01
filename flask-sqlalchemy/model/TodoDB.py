@@ -71,6 +71,7 @@ def update_todo(todo_id, title=None, completed=None):
 
 def delete_todo(todo_id):
     """Deletes the Todo specified by the provided todo_id
+    
     :param todo_id: the id of the Todo to be deleted
     :return: True if the Todo was successfully deleted
     :raise ValueError if no Todo is found for the given id
@@ -81,6 +82,6 @@ def delete_todo(todo_id):
         raise ValueError("Could not find Todo with id")
 
     db.session.delete(todo_to_delete)
-    db.session.commit
+    db.session.commit()
 
     return True
