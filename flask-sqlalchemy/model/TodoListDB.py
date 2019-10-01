@@ -37,3 +37,39 @@ def create_todo_list(name, todo_list_id=None):
 
     return new_todo_list
 
+def update_todo_list(todo_list_id, name):
+    """Updates the provided Name in the specified Todo List
+
+    :param todo_list_id: The id of the Todo List to be updated
+    :param name: The name to set within the Todo List
+    :returns The updated Todo List object
+    :rtype: TodoList
+    :raise ValueError if no TodoList is found for the given id
+    """
+    todo_list_to_update = TodoList.query.filter_by(id=todo_list_id).first()
+
+    if todo_list_to_update is None:
+        raise ValueError("Cound not find Todo List with id")
+
+    todo_list_to_update.name = name
+
+    db.session.commit()
+
+    return todo_list_to_update
+
+def delete_todo_list(todo_list_id):
+    """Deletes the Todo List specified by the provided todo_list_id
+
+    :param todo_list_id: the id of the Todo List to be deleted
+    :returns True if the Todo List was successfully deleted
+    :raise ValueError if no Todo List is found for the given id
+    """
+    todo_list_to_delete = TodoList.query.filter_by(id=todo_list_id).first()
+
+    if todo_list_to_delete is None:
+        raise ValueError("Could not found Todo List with id")
+
+    db.session.delete(todo_list_to_delete)
+    db.session.commit()
+
+    return True
