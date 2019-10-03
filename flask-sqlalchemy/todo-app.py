@@ -1,6 +1,7 @@
 from flask import Flask, abort, jsonify, request
 from model.database import db
 import model.TodoDB as TodoDB
+import model.TodoListDB as TodoListDB
 
 # Create the flask app
 app = Flask(__name__)
@@ -15,17 +16,25 @@ db.app = app
 # Create all of the tables
 # Note: The below line comes back as not used, but I believe I need to import it to make sure the
 # table gets created
-from model.models import Todo
+from model.models import Todo, TodoList
 db.create_all()
 
 
 @app.route('/todos', methods=['GET'])
-def get_all():
+def get_all_todos():
     """Returns all of the Todos that exist in the database.
 
-    :return the result as a json array"""
+    :return the result as a json array
+    """
     return jsonify([todo.to_obj() for todo in TodoDB.get_all_todos()]), 200
 
+@app.route('/todo-lists', methods=['GET'])
+def get_all_todo_lists():
+    """Returns all of the Todo Lists that existi n the database.
+
+    :return the result as a json array
+    """
+    return jsonify([todo_list.to_obj() for todo_list in TodoListDB.get_all_todo_lists()]), 200
 
 @app.route('/todos/<string:todo_id>', methods=['GET'])
 def get_todo(todo_id):
@@ -40,9 +49,21 @@ def get_todo(todo_id):
 
     return jsonify(todo_obj.to_obj()), 200
 
+@app.route('/todo-lists/<string:todo_list_id>', methods=['GET'])
+def get_todo_list(todo_list_id):
+    """Returns the Todo List specified by the provided  todo_list_id
+
+    :param todo_list_id: The id of the Todo List to return
+    :return 200 and the specified Todo List object, or 404 if no Todo List was found with the specified id
+    """
+    todo_list_object = TodoListDB.get_todo_list(todo_list_id)
+    if todo_list_object is None:
+        abort(404, 'No Todo List found for the given id!')
+
+    return jsonify(todo_list_object.to_obj()), 200
 
 @app.route('/todos', methods=['POST'])
-def create_obj():
+def create_todo_obj():
     """Used to create a new Todo.
 
     Expects the details of the Todo in JSON format as part of the request body
@@ -56,7 +77,21 @@ def create_obj():
     todo = TodoDB.create_todo(request.json['title'], 'false', request.json['id'] if 'id' in request.json else None)
     return jsonify(todo.to_obj()), 200
 
+@app.route('/todo-lists', methods=['POST'])
+def create_todo_list_obj():
+    """Used to create a new Todo List
 
+    Expects the details of the Todo List in JSON format as part of the request body
+    If no id is provided, an ID will be generated as part of the Todo List creation
+
+    :return 200 and the newly created Todo List object or 400 if no request body was found
+    """
+    if not request.json:
+        abort(400, 'No request body provided!')
+
+    todo_list = TodoListDB.create_todo_list(request.json['name'], request.json['id'] if 'id' in request.json else None)
+    return jsonify(todo_list.to_obj()), 200
+    
 @app.route('/todos/<string:todo_id>', methods=['PUT'])
 def update_obj(todo_id):
     """Updates the specified Todo with the contents of the request body (in JSON)
