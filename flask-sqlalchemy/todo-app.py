@@ -2,6 +2,7 @@ from flask import Flask, abort, jsonify, request
 from model.database import db
 import model.TodoDB as TodoDB
 import model.TodoListDB as TodoListDB
+from todoRoutes import todo_api
 
 # Create the flask app
 app = Flask(__name__)
@@ -17,6 +18,7 @@ db.app = app
 # Note: The below line comes back as not used, but I believe I need to import it to make sure the
 # table gets created
 from model.models import Todo, TodoList
+
 db.create_all()
 
 
@@ -91,9 +93,9 @@ def create_todo_list_obj():
 
     todo_list = TodoListDB.create_todo_list(request.json['name'], request.json['id'] if 'id' in request.json else None)
     return jsonify(todo_list.to_obj()), 200
-    
+
 @app.route('/todos/<string:todo_id>', methods=['PUT'])
-def update_obj(todo_id):
+def update_todo_obj(todo_id):
     """Updates the specified Todo with the contents of the request body (in JSON)
 
     Expects either (or both) of "title" and "completed" to be provided in the request body
@@ -112,6 +114,21 @@ def update_obj(todo_id):
     except ValueError:
         abort(404, "Could not find todo with the provided id")
 
+@app.route('/todo-lists/<string:todo_list_id>', methods=['PUT'])
+def update_todo_list_obj(todo_list_id):
+    """Updates the specified Todo List with the contents of the request body (in JSON)
+
+    :param todo_list_id: the id of the Todo List object to be updated
+    :return: 200 and the updated Todo List, 400 if no request body has been provided, 404 if the specified Todo List cannot be found
+    """
+    if not request.json:
+        abort(400, 'No request body provided')
+
+    try:
+        todo_list = TodoListDB.update_todo_list(todo_list_id, request.json['name'])
+        return jsonify(todo_list.to_obj()), 200
+    except:
+        abort(404, 'Could not find todo list with the provided id')
 
 @app.route('/todos/<string:todo_id>/<string:completed>', methods=['PUT'])
 def set_completed(todo_id, completed):
@@ -145,5 +162,21 @@ def delete_todo(todo_id):
     except ValueError:
         abort(404, "Could not find todo with the provided id")
 
+
+@app.route('/todo-lists/<string:todo_list_id>', methods=['DELETE'])
+def delete_todo_list(todo_list_id):
+    """Deletes the specified Todo List from the database
+
+    :param todo_list_id: The id of the Todo List to be deleted
+    :return: 200 if the Todo List was successfully deleted, 404 if the Todo List cannot be found
+    """
+    try:
+        status = TodoListDB.delete_todo_list(todo_list_id)
+        if status:
+            return '', 200
+        else:
+            return '', 500
+    except ValueError:
+        abort(404, 'Could not find todo list with the provided id')
 
 app.run(port=5000, debug=True)
