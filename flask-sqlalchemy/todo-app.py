@@ -6,6 +6,7 @@ from todoRoutes import todo_api
 
 # Create the flask app
 app = Flask(__name__)
+app.register_blueprint(todo_api, url_prefix="/helloworld")
 
 # SQLAlchemy config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///model/todos.db'
