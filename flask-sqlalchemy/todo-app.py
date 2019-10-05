@@ -31,6 +31,7 @@ def get_all_todos():
     """
     return jsonify([todo.to_obj() for todo in TodoDB.get_all_todos()]), 200
 
+
 @app.route('/todo-lists', methods=['GET'])
 def get_all_todo_lists():
     """Returns all of the Todo Lists that existi n the database.
@@ -38,6 +39,7 @@ def get_all_todo_lists():
     :return the result as a json array
     """
     return jsonify([todo_list.to_obj() for todo_list in TodoListDB.get_all_todo_lists()]), 200
+
 
 @app.route('/todos/<string:todo_id>', methods=['GET'])
 def get_todo(todo_id):
@@ -52,6 +54,7 @@ def get_todo(todo_id):
 
     return jsonify(todo_obj.to_obj()), 200
 
+
 @app.route('/todo-lists/<string:todo_list_id>', methods=['GET'])
 def get_todo_list(todo_list_id):
     """Returns the Todo List specified by the provided  todo_list_id
@@ -64,6 +67,7 @@ def get_todo_list(todo_list_id):
         abort(404, 'No Todo List found for the given id!')
 
     return jsonify(todo_list_object.to_obj()), 200
+
 
 @app.route('/todos', methods=['POST'])
 def create_todo_obj():
@@ -80,6 +84,7 @@ def create_todo_obj():
     todo = TodoDB.create_todo(request.json['title'], 'false', request.json['id'] if 'id' in request.json else None)
     return jsonify(todo.to_obj()), 200
 
+
 @app.route('/todo-lists', methods=['POST'])
 def create_todo_list_obj():
     """Used to create a new Todo List
@@ -94,6 +99,7 @@ def create_todo_list_obj():
 
     todo_list = TodoListDB.create_todo_list(request.json['name'], request.json['id'] if 'id' in request.json else None)
     return jsonify(todo_list.to_obj()), 200
+
 
 @app.route('/todos/<string:todo_id>', methods=['PUT'])
 def update_todo_obj(todo_id):
@@ -115,6 +121,7 @@ def update_todo_obj(todo_id):
     except ValueError:
         abort(404, "Could not find todo with the provided id")
 
+
 @app.route('/todo-lists/<string:todo_list_id>', methods=['PUT'])
 def update_todo_list_obj(todo_list_id):
     """Updates the specified Todo List with the contents of the request body (in JSON)
@@ -128,8 +135,9 @@ def update_todo_list_obj(todo_list_id):
     try:
         todo_list = TodoListDB.update_todo_list(todo_list_id, request.json['name'])
         return jsonify(todo_list.to_obj()), 200
-    except:
+    except ValueError:
         abort(404, 'Could not find todo list with the provided id')
+
 
 @app.route('/todos/<string:todo_id>/<string:completed>', methods=['PUT'])
 def set_completed(todo_id, completed):
@@ -179,5 +187,6 @@ def delete_todo_list(todo_list_id):
             return '', 500
     except ValueError:
         abort(404, 'Could not find todo list with the provided id')
+
 
 app.run(port=5000, debug=True)
