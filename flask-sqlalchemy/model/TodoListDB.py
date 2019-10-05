@@ -2,6 +2,7 @@ from model.database import db
 from model.models import TodoList
 from uuid import uuid4
 
+
 def get_all_todo_lists():
     """Returns all of the Todo List objects in the database
 
@@ -9,6 +10,7 @@ def get_all_todo_lists():
     :rtype: list
     """
     return TodoList.query.all()
+
 
 def get_todo_list(todo_list_id):
     """Returns the Todo List object specified by the provided todo_list_id
@@ -18,6 +20,7 @@ def get_todo_list(todo_list_id):
     :rtype TodoList
     """
     return TodoList.query.filter_by(id=todo_list_id).first()
+
 
 def create_todo_list(name, todo_list_id=None):
     """Creates a new Todo List given the provided values
@@ -36,6 +39,7 @@ def create_todo_list(name, todo_list_id=None):
     db.session.commit()
 
     return new_todo_list
+
 
 def update_todo_list(todo_list_id, name):
     """Updates the provided Name in the specified Todo List
@@ -56,6 +60,7 @@ def update_todo_list(todo_list_id, name):
     db.session.commit()
 
     return todo_list_to_update
+
 
 def delete_todo_list(todo_list_id):
     """Deletes the Todo List specified by the provided todo_list_id

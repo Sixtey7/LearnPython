@@ -25,6 +25,7 @@ class Todo(db.Model):
             'completed': self.completed
         }
 
+
 class TodoList(db.Model):
     """Model class to store Todo List objects in the database
     """
