@@ -6,7 +6,7 @@ from uuid import uuid4
 def get_all_todo_lists():
     """Returns all of the Todo List objects in the database
 
-    :returns A list of Todo List objects
+    :return A list of Todo List objects
     :rtype: list
     """
     return TodoList.query.all()
@@ -16,7 +16,7 @@ def get_todo_list(todo_list_id):
     """Returns the Todo List object specified by the provided todo_list_id
 
     :param todo_list_id: The id of the Todo List to retrieve, nominally a UUID
-    :returns A single TodoList object
+    :return A single TodoList object
     :rtype TodoList
     """
     return TodoList.query.filter_by(id=todo_list_id).first()
@@ -27,7 +27,7 @@ def create_todo_list(name, todo_list_id=None):
 
     :param name: The name of the Todo List to be created
     :param todo_list_id: The id to assign to the todo list.  If not provided, a UUID will be generated
-    :returns The created TodoList object
+    :return The created TodoList object
     :rtype TodoList
     """
     if todo_list_id is None:
@@ -46,7 +46,7 @@ def update_todo_list(todo_list_id, name):
 
     :param todo_list_id: The id of the Todo List to be updated
     :param name: The name to set within the Todo List
-    :returns The updated Todo List object
+    :return The updated Todo List object
     :rtype: TodoList
     :raise ValueError if no TodoList is found for the given id
     """
@@ -66,7 +66,7 @@ def delete_todo_list(todo_list_id):
     """Deletes the Todo List specified by the provided todo_list_id
 
     :param todo_list_id: the id of the Todo List to be deleted
-    :returns True if the Todo List was successfully deleted
+    :return True if the Todo List was successfully deleted
     :raise ValueError if no Todo List is found for the given id
     """
     todo_list_to_delete = TodoList.query.filter_by(id=todo_list_id).first()
