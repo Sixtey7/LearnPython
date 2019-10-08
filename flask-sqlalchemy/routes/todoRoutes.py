@@ -39,7 +39,9 @@ def create_todo_obj():
     if not request.json:
         abort(400, 'No request body provided!')
 
-    todo = TodoDB.create_todo(request.json['title'], 'false', request.json['id'] if 'id' in request.json else None)
+    todo = TodoDB.create_todo(request.json['title'], 'false',
+                              request.json['id'] if 'id' in request.json else None,
+                              request.json['list_id'] if 'list_id' in request.json else None)
     return jsonify(todo.to_obj()), 200
 
 

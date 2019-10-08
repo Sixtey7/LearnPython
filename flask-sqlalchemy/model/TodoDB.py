@@ -22,12 +22,13 @@ def get_todo(todo_id):
     return Todo.query.filter_by(id=todo_id).first()
 
 
-def create_todo(title, completed, todo_id=None):
+def create_todo(title, completed, todo_id=None, list_id=None):
     """Creates a Todo given the provided values
 
     :param title: The string title of the Todo be created
     :param completed: The value of the completed attribute of the Todo
     :param todo_id: The id to assign to the todo.  If not provided, a UUID will be generated as part of creation
+    :param list_id The id of the list that todo belongs to.
     :return The created Todo object
     :rtype Todo
     """
@@ -35,7 +36,7 @@ def create_todo(title, completed, todo_id=None):
         print('creating an id')
         todo_id = str(uuid4())
 
-    new_todo = Todo(id=todo_id, title=title, completed=completed)
+    new_todo = Todo(id=todo_id, title=title, completed=completed, list_id=list_id)
 
     db.session.add(new_todo)
     db.session.commit()

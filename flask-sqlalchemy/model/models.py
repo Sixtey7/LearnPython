@@ -13,7 +13,7 @@ class Todo(db.Model):
     list_id = Column(String, ForeignKey('todo-list.id'))
 
     def __repr__(self):
-        return "<Todo(id='%s', title='%s', completed='%s')>" % (self.id, self.title, self.completed)
+        return "<Todo(id='%s', title='%s', completed='%s', list_id='%s')>" % (self.id, self.title, self.completed, self.list_id)
 
     def to_obj(self):
         """Returns the object in JSON format
@@ -22,7 +22,8 @@ class Todo(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'completed': self.completed
+            'completed': self.completed,
+            'list_id': self.list_id
         }
 
 
@@ -46,3 +47,4 @@ class TodoList(db.Model):
             'id': self.id,
             'name': self.name
         }
+    
