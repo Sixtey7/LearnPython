@@ -27,6 +27,17 @@ def get_todo(todo_id):
     return jsonify(todo_obj.to_obj()), 200
 
 
+@todo_api.route('/list/<string:todo_list_id>', methods=['GET'])
+def get_todos_for_list(todo_list_id):
+    """Returns the Todos that are within the list specified by todo_list_id
+
+    :param todo_list_id: The id of the Todo List to find Todos for
+    :return: 200 and a list of Todo objects
+    """
+
+    return jsonify([todo.to_obj() for todo in TodoDB.get_todos_for_list(todo_list_id)]), 200
+
+
 @todo_api.route('', methods=['POST'])
 def create_todo_obj():
     """Used to create a new Todo.

@@ -22,6 +22,16 @@ def get_todo(todo_id):
     return Todo.query.filter_by(id=todo_id).first()
 
 
+def get_todos_for_list(todo_list_id):
+    """Returns all of the Todo objects that are within the provided todo list
+
+    :param todo_list_id: The id of the Todo List to find todos for
+    :return A list of Todo objects
+    :rtype: list
+    """
+    return Todo.query.filter_by(list_id=todo_list_id).all()
+
+
 def create_todo(title, completed, todo_id=None, list_id=None):
     """Creates a Todo given the provided values
 
