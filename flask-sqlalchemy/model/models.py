@@ -11,9 +11,11 @@ class Todo(db.Model):
     title = Column(String)
     completed = Column(String)
     list_id = Column(String, ForeignKey('todo-list.id'))
+    list = relationship("TodoList", back_populates="todos")
 
     def __repr__(self):
-        return "<Todo(id='%s', title='%s', completed='%s', list_id='%s')>" % (self.id, self.title, self.completed, self.list_id)
+        return "<Todo(id='%s', title='%s', completed='%s', list_id='%s')>" % \
+               (self.id, self.title, self.completed, self.list_id)
 
     def to_obj(self):
         """Returns the object in JSON format
@@ -23,7 +25,8 @@ class Todo(db.Model):
             'id': self.id,
             'title': self.title,
             'completed': self.completed,
-            'list_id': self.list_id
+            'list_id': self.list_id,
+            'list': self.list.name if self.list is not None else None
         }
 
 
@@ -33,17 +36,18 @@ class TodoList(db.Model):
     __tablename__ = 'todo-list'
     id = Column(String, primary_key=True)
     name = Column(String)
-    todos = relationship("Todo")
+    todos = relationship("Todo", back_populates="list")
 
     def __repr__(self):
         return "<TodoList(id='%s', name='%s')>" % (self.id, self.name)
 
     def to_obj(self):
         """Returns the object in JSON format
-        :return String represenation of the object
+        :return String representation of the object
         """
 
         return {
             'id': self.id,
-            'name': self.name
+            'name': self.name,
+            'num_todos': len(self.todos)
         }
