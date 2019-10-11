@@ -51,3 +51,14 @@ class TodoList(db.Model):
             'name': self.name,
             'num_todos': len(self.todos)
         }
+
+    def to_obj_todos(self):
+        """Returns the object in JSON format including all child todos
+        :return String representation of the object including the string representation of all child Todo objects
+        """
+
+        return {
+            'id': self.id,
+            'name': self.name,
+            'todos': [todo.to_obj() for todo in self.todos]
+        }
