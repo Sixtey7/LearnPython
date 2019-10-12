@@ -48,7 +48,8 @@ def update_todo_list_obj(todo_list_id):
     """Updates the specified Todo List with the contents of the request body (in JSON)
 
     :param todo_list_id: the id of the Todo List object to be updated
-    :return: 200 and the updated Todo List, 400 if no request body has been provided, 404 if the specified Todo List cannot be found
+    :return: 200 and the updated Todo List, 400 if no request body has been provided,
+        404 if the specified Todo List cannot be found
     """
     if not request.json:
         abort(400, 'No request body provided')

@@ -63,7 +63,8 @@ def update_todo_obj(todo_id):
     Expects either (or both) of "title" and "completed" to be provided in the request body
 
     :param todo_id: the id of the Todo object to be updated
-    :return: 200 and the updated Todo, 400 if no request body has been provided, 404 if the specified Todo cannot be found
+    :return: 200 and the updated Todo, 400 if no request body has been provided,
+        404 if the specified Todo cannot be found
     """
     if not request.json:
         abort(400, 'No request body provided')
@@ -88,7 +89,7 @@ def set_completed(todo_id, completed):
     try:
         todo = TodoDB.update_todo(todo_id=todo_id, completed=completed)
 
-        return jsonify(todo.to_obj()),200
+        return jsonify(todo.to_obj()), 200
     except ValueError:
         abort(404, "Could not find todo with the provided id")
 
@@ -100,7 +101,7 @@ def delete_todo(todo_id):
     :param todo_id: The id of the Todo to be deleted
     :return: 200 if the Todo was successfully deleted, 404 if the Todo cannot be found
     """
-    try :
+    try:
         status = TodoDB.delete_todo(todo_id)
         if status:
             return '', 200
