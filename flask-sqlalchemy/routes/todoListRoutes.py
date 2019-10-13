@@ -13,6 +13,15 @@ def get_all_todo_lists():
     return jsonify([todo_list.to_obj() for todo_list in TodoListDB.get_all_todo_lists()]), 200
 
 
+@todo_list_api.route('/full', methods=['GET'])
+def get_all_todo_lists_full():
+    """Returns all of the Todo Lists and their Todos that exist in the database
+
+    :return the result as a json array
+    """
+    return jsonify([todo_list.to_obj_todos() for todo_list in TodoListDB.get_all_todo_lists()]), 200
+
+
 @todo_list_api.route('/<string:todo_list_id>', methods=['GET'])
 def get_todo_list(todo_list_id):
     """Returns the Todo List specified by the provided  todo_list_id
@@ -25,6 +34,21 @@ def get_todo_list(todo_list_id):
         abort(404, 'No Todo List found for the given id!')
 
     return jsonify(todo_list_object.to_obj()), 200
+
+
+@todo_list_api.route('/full/<string:todo_list_id>', methods=['GET'])
+def get_todo_list_full(todo_list_id):
+    """Returns the Todo List with its associated Todos specified by the provided todo_list_id
+
+    :param todo_list_id: The id of the Todo List to return
+    :return 200 and the specified Todo List object with its associated Todos,
+        or 404 if no Todo List was found with the specified id
+    """
+    todo_list_object = TodoListDB.get_todo_list(todo_list_id)
+    if todo_list_object is None:
+        abort(404, 'No Todo List found for given id!')
+
+    return jsonify(todo_list_object.to_obj_todos()), 200
 
 
 @todo_list_api.route('', methods=['POST'])
